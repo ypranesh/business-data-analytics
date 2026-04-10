@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pranesh Yuvaraj — Data Analyst</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --cream:  #F5F0E8;
+      --sand:   #E8DFD0;
+      --stone:  #C4B49A;
+      --bark:   #8B6F47;
+      --earth:  #5C4A32;
+      --ink:    #2C2018;
+      --olive:  #4A5E3A;
+      --sage:   #7A9468;
+      --fern:   #C8D9BC;
+    }
+
+    /* ─── CURSOR ─── */
+    * { cursor: none; }
+    #cursor {
+      width: 8px; height: 8px;
+      background: var(--bark); border-radius: 50%;
+      position: fixed; pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%);
+    }
+    #cursor-ring {
+      width: 22px; height: 22px;
+      border: 1px solid var(--stone); border-radius: 50%;
+      position: fixed; pointer-events: none; z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, border-color 0.2s;
+    }
+    #cursor-ring.grow { width: 34px; height: 34px; border-color: var(--olive); }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream); color: var(--ink);
+      font-size: 15px; line-height: 1.7; overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.5rem 4rem;
+      background: var(--cream); border-bottom: 1px solid var(--sand);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px; font-weight: 500;
+      color: var(--earth); letter-spacing: 1px; text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--earth); text-decoration: none;
+      position: relative; padding-bottom: 2px; transition: color 0.2s;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 0; height: 1px; background: var(--olive);
+      transition: width 0.25s ease;
+    }
+    .nav-links a:hover { color: var(--olive); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* ─── SHARED ─── */
+    section { padding: 7rem 4rem; }
+    .section-label {
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--olive); font-weight: 500; margin-bottom: 3rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--sand); }
+    .cta-btn {
+      display: inline-block; padding: 0.85rem 2.25rem;
+      background: var(--olive); color: var(--cream);
+      font-size: 11px; font-weight: 500; letter-spacing: 2.5px;
+      text-transform: uppercase; text-decoration: none;
+      border: none; border-radius: 1px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .cta-btn:hover { background: var(--ink); transform: translateY(-1px); }
+
+    /* ─── HERO ─── */
+    #home {
+      min-height: 100vh; display: flex; align-items: center;
+      padding-top: 9rem; border-bottom: 1px solid var(--sand);
+    }
+    .hero-inner { max-width: 660px; }
+    .overline {
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--olive); font-weight: 500; margin-bottom: 1.25rem;
+    }
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(52px, 7vw, 84px);
+      font-weight: 500; line-height: 1.05;
+      color: var(--ink); margin-bottom: 1.25rem;
+    }
+    h1 em { font-style: italic; color: var(--bark); }
+    .hero-sub {
+      font-size: 15px; color: var(--earth);
+      max-width: 460px; line-height: 1.85; margin-bottom: 2.5rem;
+    }
+    .industries { margin-top: 2.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .ind-tag {
+      font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--olive); border: 1px solid var(--sage);
+      background: var(--fern); padding: 4px 14px; border-radius: 20px;
+    }
+
+    /* ─── ACCORDION ─── */
+    .accordion-list { max-width: 800px; }
+    .acc-item { border-top: 1px solid var(--sand); }
+    .acc-item:last-child { border-bottom: 1px solid var(--sand); }
+    .acc-trigger {
+      width: 100%; display: flex; justify-content: space-between; align-items: center;
+      padding: 1.75rem 0; background: none; border: none; text-align: left;
+    }
+    .acc-trigger-left { display: flex; align-items: baseline; gap: 0.85rem; }
+    .acc-num { font-size: 11px; color: var(--sage); letter-spacing: 2px; }
+    .acc-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px; font-weight: 500; color: var(--earth); transition: color 0.2s;
+    }
+    .acc-trigger:hover .acc-title { color: var(--olive); }
+    .acc-icon {
+      width: 28px; height: 28px;
+      border: 1px solid var(--stone); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; color: var(--bark); flex-shrink: 0;
+      transition: transform 0.35s ease, border-color 0.2s, color 0.2s;
+    }
+    .acc-item.open .acc-icon { transform: rotate(45deg); border-color: var(--olive); color: var(--olive); }
+    .acc-body { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1); }
+    .acc-item.open .acc-body { max-height: 900px; }
+
+    /* ─── SERVICES ─── */
+    #services { border-bottom: 1px solid var(--sand); }
+    .svc-content { padding: 0 0 2.25rem; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2.5rem; }
+    .svc-desc { font-size: 14px; color: var(--earth); line-height: 1.9; }
+    .svc-tech {
+      font-size: 13px; color: var(--stone); line-height: 1.85;
+      border-left: 1px solid var(--fern); padding-left: 1.5rem;
+    }
+    .svc-tech strong {
+      display: block; font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--olive); font-weight: 500; margin-bottom: 0.6rem;
+    }
+
+    /* ─── WORK ─── */
+    #work { border-bottom: 1px solid var(--sand); }
+    .work-content { padding: 0 0 2.25rem; }
+    .work-tag {
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--olive); display: block; margin-bottom: 1.5rem;
+    }
+    .work-blocks { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.75rem; }
+    .work-block { padding: 1.25rem 1.5rem; background: var(--sand); border-radius: 2px; }
+    .work-block-label {
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--olive); font-weight: 500; margin-bottom: 0.5rem;
+    }
+    .work-block-text { font-size: 13.5px; color: var(--earth); line-height: 1.85; }
+    .work-block.result { background: var(--fern); }
+    .work-block.result .work-block-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px; font-style: italic; color: var(--earth);
+    }
+    .work-visuals { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem; }
+    .work-visuals img {
+      width: calc(50% - 0.5rem); border-radius: 2px;
+      border: 1px solid var(--sand); display: block;
+    }
+
+    /* ─── ABOUT ─── */
+    #about { border-bottom: 1px solid var(--sand); }
+    .about-inner { max-width: 680px; }
+    .about-inner p { font-size: 14px; color: var(--earth); line-height: 1.95; margin-bottom: 1.1rem; }
+    .about-inner p:last-child { margin-bottom: 0; }
+
+    /* ─── CONTACT ─── */
+    .contact-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: start; max-width: 900px;
+    }
+    .contact-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(38px, 4vw, 56px);
+      font-weight: 500; line-height: 1.15; color: var(--ink); margin-bottom: 1rem;
+    }
+    .contact-heading em { font-style: italic; color: var(--olive); }
+    .contact-sub { font-size: 14px; color: var(--earth); line-height: 1.85; }
+    .contact-links { display: flex; flex-direction: column; margin-bottom: 1.75rem; }
+    .contact-link {
+      display: flex; align-items: center; gap: 1.25rem;
+      text-decoration: none; color: var(--earth); font-size: 14px;
+      border-bottom: 1px solid var(--sand); padding: 1.1rem 0; transition: color 0.2s;
+    }
+    .contact-link:first-child { border-top: 1px solid var(--sand); }
+    .contact-link:hover { color: var(--olive); }
+    .cl-label {
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--stone); min-width: 72px;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 1.5rem 4rem; border-top: 1px solid var(--sand);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    footer p { font-size: 12px; color: var(--stone); letter-spacing: 0.5px; }
+
+    /* ─── FADE IN ─── */
+    .fade-in { opacity: 0; transform: translateY(16px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .fade-in.visible { opacity: 1; transform: none; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      nav { padding: 1.25rem 1.5rem; }
+      .nav-links { gap: 1.25rem; }
+      section { padding: 5rem 1.5rem; }
+      .svc-content, .work-blocks, .contact-inner { grid-template-columns: 1fr; }
+      .work-visuals img { width: 100%; }
+      footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#home">PY</a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-inner fade-in">
+    <p class="overline">Freelance Data Analyst</p>
+    <h1>Your data,<br><em>made simple.</em></h1>
+    <!-- Edit the line below to update the hero description -->
+    <p class="hero-sub">I help e-commerce, media, and marketing businesses turn scattered data into clear decisions.</p>
+    <a href="#contact" class="cta-btn">Book a free call</a>
+    <div class="industries">
+      <span class="ind-tag">E-commerce</span>
+      <span class="ind-tag">Media</span>
+      <span class="ind-tag">Marketing</span>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <p class="section-label fade-in">Services</p>
+  <div class="accordion-list">
+
+    <!-- Edit service name, description, and what to expect inside each block below -->
+
+    <div class="acc-item fade-in">
+      <button class="acc-trigger" onclick="toggle(this)">
+        <div class="acc-trigger-left"><span class="acc-num">01</span><span class="acc-title">Data Health Check</span></div>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-body">
+        <div class="svc-content">
+          <div class="svc-desc">
+            Most businesses collect data but never really look at it. I audit everything you have — spreadsheets, CRM exports, ad data, sales reports — and tell you exactly what's usable, what's broken, and what's missing. You walk away with a clear report and a prioritised fix list.
+            <br><br><em>Works as a standalone project or as the starting point for everything else.</em>
+          </div>
+          <div class="svc-tech">
+            <strong>What to expect</strong>
+            Review of all data sources · Gap and duplicate analysis · Data quality scoring · Written findings report · Prioritised recommendations
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item fade-in">
+      <button class="acc-trigger" onclick="toggle(this)">
+        <div class="acc-trigger-left"><span class="acc-num">02</span><span class="acc-title">Data Foundation</span></div>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-body">
+        <div class="svc-content">
+          <div class="svc-desc">
+            If your sales data lives in one place, your ad spend in another, and your customer records somewhere else — this connects them. I set up a clean, reliable flow from your sources into one place, ready for reporting. You stop pulling data manually. It just shows up.
+          </div>
+          <div class="svc-tech">
+            <strong>Technically</strong>
+            Source identification · Extraction scripts · Data cleaning and standardisation · Central destination setup — warehouse, Sheets, or BI tool
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item fade-in">
+      <button class="acc-trigger" onclick="toggle(this)">
+        <div class="acc-trigger-left"><span class="acc-num">03</span><span class="acc-title">Business Dashboard</span></div>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-body">
+        <div class="svc-content">
+          <div class="svc-desc">
+            A live dashboard built around the numbers that actually matter — Revenue, Profit Margins, Customer Acquisition Cost, Campaign ROI, Top Products, Churn, and Month-on-Month trends. Updates automatically. No more Monday morning report-building.
+          </div>
+          <div class="svc-tech">
+            <strong>Technically</strong>
+            Metric mapping · Source connection · Dashboard build in Tableau or Looker Studio · Automated refresh setup · Handover and walkthrough
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item fade-in">
+      <button class="acc-trigger" onclick="toggle(this)">
+        <div class="acc-trigger-left"><span class="acc-num">04</span><span class="acc-title">Automated Reporting</span></div>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-body">
+        <div class="svc-content">
+          <div class="svc-desc">
+            Weekly reports, monthly summaries, year-on-year comparisons — if you're building it by hand every time, I can automate it. Scheduled reports delivered to your inbox or shared drive, with forecasts baked in where useful.
+          </div>
+          <div class="svc-tech">
+            <strong>Technically</strong>
+            Report audit · Script build in Python · Schedule setup · PDF or email delivery · 8-week forecast integration where applicable
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- WORK -->
+<section id="work">
+  <p class="section-label fade-in">Work</p>
+  <div class="accordion-list">
+
+    <div class="acc-item fade-in">
+      <button class="acc-trigger" onclick="toggle(this)">
+        <div class="acc-trigger-left"><span class="acc-num">01</span><span class="acc-title">Customer Retention Analysis</span></div>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-body">
+        <div class="work-content">
+          <span class="work-tag">E-commerce · Customer Analytics</span>
+          <div class="work-blocks">
+            <div class="work-block">
+              <p class="work-block-label">The Problem</p>
+              <p class="work-block-text">An e-commerce business had two years of transaction data sitting unused. Marketing budget was being spent equally across all customers — including those who had already left.</p>
+            </div>
+            <div class="work-block">
+              <p class="work-block-label">The Approach</p>
+              <p class="work-block-text">Analysed 96,000+ customer records to segment the entire base by purchase behaviour. Identified who the best customers are, who is slipping away, and who is already gone.</p>
+            </div>
+            <div class="work-block">
+              <p class="work-block-label">What You Get</p>
+              <p class="work-block-text">A clear customer map broken into actionable groups — Champions worth 2.3x the average customer, an At Risk group representing 40% of total revenue, and a Promising segment ripe for a first follow-up. Each group with a recommended action.</p>
+            </div>
+            <div class="work-block result">
+              <p class="work-block-label">The Result</p>
+              <p class="work-block-text">Late deliveries proven to increase churn by 21 percentage points. A logistics problem was quietly driving a retention crisis.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item fade-in">
+      <button class="acc-trigger" onclick="toggle(this)">
+        <div class="acc-trigger-left"><span class="acc-num">02</span><span class="acc-title">Sales Performance Dashboard</span></div>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-body">
+        <div class="work-content">
+          <span class="work-tag">Retail · Business Dashboard</span>
+          <div class="work-blocks">
+            <div class="work-block">
+              <p class="work-block-label">The Problem</p>
+              <p class="work-block-text">A retail business had no single view of performance. Decisions were being made from memory and gut feel.</p>
+            </div>
+            <div class="work-block">
+              <p class="work-block-label">The Approach</p>
+              <p class="work-block-text">Mapped stakeholder requirements across sales, regional, and customer teams. Built a two-dashboard system that everyone from the floor manager to the CEO could read without training.</p>
+            </div>
+            <div class="work-block">
+              <p class="work-block-label">What You Get</p>
+              <p class="work-block-text">Revenue and profit trends month by month, which regions are profitable and which are bleeding, which products are worth pushing and which are quietly destroying margin, and how customer segments behave differently.</p>
+            </div>
+            <div class="work-block result">
+              <p class="work-block-label">The Result</p>
+              <p class="work-block-text">Discount-driven losses on two product lines identified and quantified for the first time.</p>
+            </div>
+          </div>
+          <!-- Tableau screenshots pulled from your GitHub repo -->
+          <div class="work-visuals">
+            <img src="https://raw.githubusercontent.com/ypranesh/tableau-superstore-sales-analytics/main/screenshots/dashboard1_overview.png" alt="Sales Dashboard Overview" loading="lazy"/>
+            <img src="https://raw.githubusercontent.com/ypranesh/tableau-superstore-sales-analytics/main/screenshots/dashboard2_advanced.png" alt="Sales Dashboard Advanced" loading="lazy"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item fade-in">
+      <button class="acc-trigger" onclick="toggle(this)">
+        <div class="acc-trigger-left"><span class="acc-num">03</span><span class="acc-title">Automated Weekly Sales Report</span></div>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-body">
+        <div class="work-content">
+          <span class="work-tag">Automation · Forecasting</span>
+          <div class="work-blocks">
+            <div class="work-block">
+              <p class="work-block-label">The Problem</p>
+              <p class="work-block-text">Every Monday morning, someone spent two hours pulling numbers from different places, formatting a report, and sending it out. It was manual, error-prone, and took time away from actual decisions.</p>
+            </div>
+            <div class="work-block">
+              <p class="work-block-label">The Approach</p>
+              <p class="work-block-text">Mapped the entire reporting process, identified every data source, and automated it end to end. The report now builds and delivers itself.</p>
+            </div>
+            <div class="work-block">
+              <p class="work-block-label">What You Get</p>
+              <p class="work-block-text">A clean weekly PDF landing in your inbox every Monday before you arrive — covering last week's sales performance, trends, and an 8-week forward forecast. No spreadsheets, no manual effort, no waiting.</p>
+            </div>
+            <div class="work-block result">
+              <p class="work-block-label">The Result</p>
+              <p class="work-block-text">A 2-hour weekly task reduced to zero. Forecasting added as a bonus — something the team didn't have before at all.</p>
+            </div>
+          </div>
+          <!-- Python report charts pulled from your GitHub repo -->
+          <div class="work-visuals">
+            <img src="https://raw.githubusercontent.com/ypranesh/python-automated-sales-report/main/charts/eda_overview.png" alt="EDA Overview" loading="lazy"/>
+            <img src="https://raw.githubusercontent.com/ypranesh/python-automated-sales-report/main/charts/forecast.png" alt="Sales Forecast" loading="lazy"/>
+            <img src="https://raw.githubusercontent.com/ypranesh/python-automated-sales-report/main/charts/report_1.png" alt="Report Page 1" loading="lazy"/>
+            <img src="https://raw.githubusercontent.com/ypranesh/python-automated-sales-report/main/charts/report_2.png" alt="Report Page 2" loading="lazy"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ABOUT — edit the paragraphs below to update your bio -->
+<section id="about">
+  <p class="section-label fade-in">About</p>
+  <div class="about-inner fade-in">
+    <p>I'm Pranesh, a data analyst with 5 years of experience embedded inside e-commerce and marketing teams at companies including Saaragama, Yokohama, and Rise IT.</p>
+    <p>I've seen first-hand what happens when the right numbers aren't visible to the right people — budgets get spread thin, problems go undetected, and decisions get made on gut feel. I started freelancing because most small and mid-sized businesses don't need a full-time analyst. They need someone who can come in, make sense of their data, and leave them with something they can actually use.</p>
+    <p>I work independently, project by project. No retainers, no bloated proposals — just clear scope, honest timelines, and work that speaks for itself.</p>
+    <p>If your business runs on data you don't fully trust or can't easily see, that's exactly where I start.</p>
+  </div>
+</section>
+
+<!-- CONTACT — edit email, LinkedIn, and portfolio links below -->
+<section id="contact">
+  <p class="section-label fade-in">Contact</p>
+  <div class="contact-inner fade-in">
+    <div>
+      <h2 class="contact-heading">Let's work<br><em>together.</em></h2>
+      <p class="contact-sub">Not sure where to start? Book a free 30-minute call. You tell me the problem, I'll tell you if and how I can help — no commitment.</p>
+    </div>
+    <div>
+      <div class="contact-links">
+        <a class="contact-link" href="mailto:ypranesh29@gmail.com">
+          <span class="cl-label">Email</span>
+          <span>ypranesh29@gmail.com</span>
+        </a>
+        <a class="contact-link" href="https://www.linkedin.com/in/pranesh-yuvaraj/" target="_blank">
+          <span class="cl-label">LinkedIn</span>
+          <span>pranesh-yuvaraj</span>
+        </a>
+        <a class="contact-link" href="https://ypranesh.github.io" target="_blank">
+          <span class="cl-label">Portfolio</span>
+          <span>ypranesh.github.io</span>
+        </a>
+      </div>
+      <a href="mailto:ypranesh29@gmail.com" class="cta-btn">Book a free call</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Pranesh Yuvaraj</p>
+  <p>E-commerce · Media · Marketing</p>
+</footer>
+
+<script>
+  // Cursor — dot and ring move together, no lag
+  const cur = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  document.addEventListener('mousemove', e => {
+    const x = e.clientX + 'px', y = e.clientY + 'px';
+    cur.style.left = x; cur.style.top = y;
+    ring.style.left = x; ring.style.top = y;
+  });
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('grow'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('grow'));
+  });
+
+  // Accordion — one open at a time
+  function toggle(btn) {
+    const item = btn.closest('.acc-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.acc-item.open').forEach(el => el.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  // Fade in on scroll
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
